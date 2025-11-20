@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  # --- 1. MySQL 服务 ---
+  mysql:
+    image: mysql:8.0
+    container_name: coupon-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234  # ⚠️ 对应你代码里的密码
+      MYSQL_DATABASE: coupon     # ⚠️ 自动创建一个名为 coupon 的库
+    ports:
+      - "3307:3306"              # 映射到宿主机，方便你用 Navicat/DBeaver 连接
+    volumes:
+      - ./db_data:/var/lib/mysql # 数据持久化：把数据存在当前目录的 db_data 文件夹下，防止重启丢数据
+    command: --default-authentication-plugin=mysql_native_password # 解决部分客户端连接报错问题
+
+  # --- 2. Redis 服务 ---
+  redis:
+    image: redis:alpine
+    container_name: coupon-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis_data:/data
+
+  # --- 3. Spring Boot 应用 ---
+  app:
+    build: .                     # 使用当前目录的 Dockerfile 构建镜像
+    container_name: coupon-app
+    ports:
+      - "8081:8081"              # 对外暴露端口
+    depends_on:                  # 确保 MySQL 和 Redis 先启动
+      - mysql
+      - redis
+    environment:
+      # 🔥 核心网络配置：覆盖 application.yml 中的配置
+      # 在 Docker Compose 网络中，直接写服务名 "mysql" 和 "redis" 即可访问
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/coupon?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+      SPRING_DATA_REDIS_HOST: redis  # 这里填上面定义的服务名 "redis"
