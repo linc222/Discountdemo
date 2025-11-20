@@ -12,7 +12,7 @@
 
 ## 前端展示
 
-![image-20251120205357500](C:\Users\MR\AppData\Roaming\Typora\typora-user-images\image-20251120205357500.png)
+![image-20251120205357500](https://github.com/linc222/Discountdemo/blob/main/images/webTest.png?raw=true)
 
 ## 🛠️ 技术栈
 
