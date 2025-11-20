@@ -10,6 +10,10 @@
 - **用户端**：查看优惠券、高并发抢券、我的卡包。
 - **交易端**：模拟下单核销，自动计算优惠金额。
 
+## 前端展示
+
+![image-20251120205357500](C:\Users\MR\AppData\Roaming\Typora\typora-user-images\image-20251120205357500.png)
+
 ## 🛠️ 技术栈
 
 - **核心框架**: Java 17, Spring Boot 3.2.0
